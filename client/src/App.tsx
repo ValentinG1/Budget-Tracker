@@ -37,7 +37,18 @@ function App() {
     }
   };
 
-  // 2. Handle form submission (POST request)
+  // 2. CALCULATE FINANCIAL SUMMARY
+  const totalIncome = transactions
+    .filter((t) => t.type === 'income')
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const totalExpenses = transactions
+    .filter((t) => t.type === 'expense')
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const totalBalance = totalIncome - totalExpenses;
+
+  // 3. Handle form submission (POST request)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -79,7 +90,60 @@ function App() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-      <h1>Budget Tracker 💰</h1>
+      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Budget Tracker 💰</h1>
+
+      {/* FINANCIAL SUMMARY DASHBOARD */}
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        gap: '15px', 
+        marginBottom: '30px' 
+      }}>
+        {/* Balance Card */}
+        <div style={{ 
+          flex: 1, 
+          padding: '15px', 
+          borderRadius: '8px', 
+          background: totalBalance >= 0 ? '#e6f4ea' : '#fce8e6', 
+          border: `1px solid ${totalBalance >= 0 ? '#137333' : '#c5221f'}`,
+          textAlign: 'center'
+        }}>
+          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Total Balance</span>
+          <h2 style={{ margin: '5px 0 0 0', color: totalBalance >= 0 ? '#137333' : '#c5221f' }}>
+            ${totalBalance.toFixed(2)}
+          </h2>
+        </div>
+
+        {/* Income Card */}
+        <div style={{ 
+          flex: 1, 
+          padding: '15px', 
+          borderRadius: '8px', 
+          background: '#f1f8e9', 
+          border: '1px solid #689f38',
+          textAlign: 'center'
+        }}>
+          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Income</span>
+          <h2 style={{ margin: '5px 0 0 0', color: '#33691e' }}>
+            +${totalIncome.toFixed(2)}
+          </h2>
+        </div>
+
+        {/* Expense Card */}
+        <div style={{ 
+          flex: 1, 
+          padding: '15px', 
+          borderRadius: '8px', 
+          background: '#fbe9e7', 
+          border: '1px solid #ff5722',
+          textAlign: 'center'
+        }}>
+          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Expenses</span>
+          <h2 style={{ margin: '5px 0 0 0', color: '#bf360c' }}>
+            -${totalExpenses.toFixed(2)}
+          </h2>
+        </div>
+      </div>
 
       {/* Form Section */}
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px' }}>
