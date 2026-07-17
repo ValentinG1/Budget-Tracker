@@ -13,7 +13,6 @@ interface Transaction {
 function App() {
   // State to store the list of transactions
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  
   // State for form fields
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -46,7 +45,7 @@ function App() {
     .filter((t) => t.type === 'expense')
     .reduce((sum, t) => sum + Number(t.amount), 0);
 
-  const totalBalance = totalIncome - totalExpenses;
+  const totalBalance = totalIncome - totalExpenses;  
 
   // 3. Handle form submission (POST request)
   const handleSubmit = async (e: React.FormEvent) => {
@@ -85,6 +84,27 @@ function App() {
       }
     } catch (error) {
       console.error("Error adding transaction:", error);
+    }
+  };
+
+  // 4. Handle item deletion (DELETE request)
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: 'DELETE',
+      });
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        // Filter the local state array to remove the deleted item instantly
+        setTransactions(transactions.filter((t) => t.id !== id));
+        console.log(data.message);
+      } else {
+        alert(data.message || "An error occurred while deleting");
+      }
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
     }
   };
 
@@ -193,13 +213,33 @@ function App() {
               <li key={t.id} style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
+                alignItems: 'center',
                 padding: '10px', 
                 borderBottom: '1px solid #eee',
                 color: t.type === 'expense' ? '#dc3545' : '#28a745',
                 fontWeight: '500'
               }}>
                 <span><strong>{t.description}</strong> ({t.category || 'No Category'})</span>
-                <span>{t.type === 'expense' ? '-' : '+'}${Number(t.amount).toFixed(2)}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                  <span>{t.type === 'expense' ? '-' : '+'}${Number(t.amount).toFixed(2)}</span>
+                  
+                  {/* Delete Button Component */}
+                  <button 
+                    onClick={() => t.id && handleDelete(t.id)}
+                    style={{ 
+                      background: 'none', 
+                      border: 'none', 
+                      color: '#dc3545', 
+                      cursor: 'pointer', 
+                      fontSize: '16px', 
+                      fontWeight: 'bold', 
+                      padding: '0 5px' 
+                    }}
+                    title="Delete transaction"
+                  >
+                    ✕
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

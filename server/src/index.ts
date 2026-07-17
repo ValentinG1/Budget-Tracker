@@ -50,6 +50,28 @@ app.post('/api/transactions', async (req: Request, res: Response) => {
   }
 });
 
+// 3. ROUTE TO DELETE A TRANSACTION BY ID (DELETE)
+app.delete('/api/transactions/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params; // Get the transaction ID from the request parameters
+
+    // Use a parameterized query to safely delete the transaction by ID
+    // The "$1" is a placeholder for the ID value, which is passed as an array in the second argument to prevent SQL injection
+    // The RETURNING * clause allows us to check if a row was actually deleted
+    const deleteTransaction = await pool.query('DELETE FROM transactions WHERE id = $1 RETURNING *', [id]);
+
+    //  Check if any rows were deleted; if not, return a 404 error
+    if (deleteTransaction.rows.length === 0) {
+      return res.status(404).json({ error: "Transaction not found" });
+    }
+    // 6. Return a success message if the transaction was deleted successfully
+    res.json({ message: "Transaction deleted successfully", transaction: deleteTransaction.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred while deleting the transaction" });
+  }
+});
+
 // Start the server and listen on the configured port
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
