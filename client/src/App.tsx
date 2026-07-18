@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 
 // Define what a Transaction looks like (TypeScript interface)
 interface Transaction {
@@ -109,16 +110,11 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
+    <div className='app-container'>
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Budget Tracker 💰</h1>
 
       {/* FINANCIAL SUMMARY DASHBOARD */}
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        gap: '15px', 
-        marginBottom: '30px' 
-      }}>
+      <div className='summary-container' >
         {/* Balance Card */}
         <div style={{ 
           flex: 1, 
