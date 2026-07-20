@@ -111,56 +111,29 @@ function App() {
 
   return (
     <div className='app-container'>
-      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Budget Tracker 💰</h1>
+      <h1>Budget Tracker💰</h1>
 
       {/* FINANCIAL SUMMARY DASHBOARD */}
-      <div className='summary-container' >
-        {/* Balance Card */}
-        <div style={{ 
-          flex: 1, 
-          padding: '15px', 
-          borderRadius: '8px', 
-          background: totalBalance >= 0 ? '#e6f4ea' : '#fce8e6', 
-          border: `1px solid ${totalBalance >= 0 ? '#137333' : '#c5221f'}`,
-          textAlign: 'center'
-        }}>
-          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Total Balance</span>
-          <h2 style={{ margin: '5px 0 0 0', color: totalBalance >= 0 ? '#137333' : '#c5221f' }}>
-            ${totalBalance.toFixed(2)}
-          </h2>
-        </div>
+    <div className="dashboard">
+      {/* Card Total Balance */}
+    <div className={`card ${totalBalance >= 0 ? 'balance-positive' : 'balance-negative'}`}>
+        <div className="card-title">Total Balance</div>
+        <div className="card-amount">{totalBalance.toFixed(2)} $</div>
+    </div>
+    
+    {/* Card Income */}
+    <div className="card balance-positive">
+      <div className="card-title">Income</div>
+      <div className="card-amount">+ {totalIncome.toFixed(2)} $</div>
+    </div>
 
-        {/* Income Card */}
-        <div style={{ 
-          flex: 1, 
-          padding: '15px', 
-          borderRadius: '8px', 
-          background: '#f1f8e9', 
-          border: '1px solid #689f38',
-          textAlign: 'center'
-        }}>
-          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Income</span>
-          <h2 style={{ margin: '5px 0 0 0', color: '#33691e' }}>
-            +${totalIncome.toFixed(2)}
-          </h2>
-        </div>
-
-        {/* Expense Card */}
-        <div style={{ 
-          flex: 1, 
-          padding: '15px', 
-          borderRadius: '8px', 
-          background: '#fbe9e7', 
-          border: '1px solid #ff5722',
-          textAlign: 'center'
-        }}>
-          <span style={{ fontSize: '12px', textTransform: 'uppercase', color: '#5f6368', fontWeight: 'bold' }}>Expenses</span>
-          <h2 style={{ margin: '5px 0 0 0', color: '#bf360c' }}>
-            -${totalExpenses.toFixed(2)}
-          </h2>
-        </div>
-      </div>
-
+    {/* Card Expenses */}
+    <div className="card balance-negative">
+      <div className="card-title">Expenses</div>
+      <div className="card-amount">- {totalExpenses.toFixed(2)} $</div>
+    </div>
+    
+    
       {/* Form Section */}
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '30px' }}>
         <h3>Add New Transaction</h3>
@@ -242,6 +215,7 @@ function App() {
         )}
       </div>
     </div>
+  </div>
   );
 }
 

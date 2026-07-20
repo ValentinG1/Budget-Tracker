@@ -7,11 +7,39 @@
 }
 .dashboard {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 16px;
-  margin-bottom: 40px;
+  margin: 20px auto 40px auto;
+  width: 100%;
+  max-width: 800px;
+  box-sizing:border-box;
 }
 .card.balance-positive{
   background: linear-gradient(135deg, #e6f9ed 0%, #d1f4df 100%);
   color: #166534
+}
+.card {
+  padding: 20px;
+  border-radius: 12px;
+  text-align:center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.card.balance-negative {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #991b1b;
+}
+.card-title {
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.8;
+}
+.card-amount {
+  font-size: 28px;
+  font-weight: 700;
 }
